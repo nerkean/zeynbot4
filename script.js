@@ -40,25 +40,40 @@ tabs.forEach(tab => {
 async function fetchProfileData(uuid) {
     console.log(`функция fetchProfileData(${uuid}) вызвана`);
     if (cachedProfileData[uuid]) {
-        console.log(`Данные профиля для ${uuid} были найдены в кэше`);
-        return cachedProfileData[uuid];
+      console.log(`Данные профиля для ${uuid} были найдены в кэше`);
+      return cachedProfileData[uuid];
     }
     try {
-        const response = await fetch(`https://zeynbot3.onrender.com/profile/${uuid}`);
-        if (!response.ok) {
-            const errorText = await response.text(); 
-            console.error("Ошибка при получении данных профиля:", response.status, response.statusText, errorText);
-            throw new Error(`Ошибка при получении данных: ${response.status} - ${errorText}`);
+      const response = await fetch(`https://zeynbot3.onrender.com/profile/${uuid}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Ошибка при получении данных профиля:", response.status, response.statusText, errorText);
+  
+        // Обработка ошибки 429 (Too Many Requests)
+        if (response.status === 429) {
+          const retryAfter = response.headers.get('Retry-After');
+          const message = retryAfter
+            ? `Превышен лимит запросов. Попробуйте снова через ${retryAfter} секунд.`
+            : `Превышен лимит запросов. Попробуйте позже.`;
+          displayErrorMessage(message); // Показываем сообщение об ошибке на странице
+          throw new Error(message);
         }
-        const data = await response.json();
-        console.log("Полученные данные профиля:", data);
-        cachedProfileData[uuid] = data;
-        return data;
+  
+        throw new Error(`Ошибка при получении данных: ${response.status} - ${errorText}`);
+      }
+      const data = await response.json();
+      console.log("Полученные данные профиля:", data);
+      cachedProfileData[uuid] = data;
+      return data;
     } catch (error) {
-        console.error("Ошибка в fetchProfileData:", error);
-        return {};
+      console.error("Ошибка в fetchProfileData:", error);
+      // Если это не ошибка 429, то покажем стандартное сообщение об ошибке
+      if (error.message.indexOf('Превышен лимит запросов') === -1) {
+        displayErrorMessage('Произошла ошибка при загрузке данных. Пожалуйста, обновите страницу или попробуйте позже.');
+      }
+      return {};
     }
-}
+  }
 
 async function fetchAchievementsData(uuid) {
     console.log(`функция fetchAchievementsData(${uuid}) вызвана`);
@@ -216,7 +231,7 @@ function displayProfileData(data) {
             profileStatsContainer.appendChild(blockElement);
         });
 
-        if (allowedRoleIds.some(roleId => data.roleAcquisitionDates && data.roleAcquisitionDates.hasOwnProperty(roleId))) {
+        if (allowedRoleIds.some(roleId => data.roles && data.roles.includes(roleId))) {
             const staffStatsBlocks = [
                 {
                     name: 'Использование команд', value: [
