@@ -56,7 +56,7 @@ boughtEPCGenerators: { type: String, default: null },
  userAvatar: { type: String, default: null },
  uuid: {
   type: String,
-  default: uuidv4, // Генерируем UUID при создании пользователя
+  default: uuidv4, 
   unique: true,
 },
 });
