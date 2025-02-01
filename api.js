@@ -9,6 +9,7 @@ const session = require('express-session');
 const { fetch } = require('undici');
 const Item = require('./Item');
 const Inventory = require('./inventory');
+const Counter = require('./Counter');
 const { Client, IntentsBitField } = require('discord.js');
 const NodeCache = require('node-cache');
 const rateLimit = require("express-rate-limit");
@@ -500,6 +501,26 @@ app.get('/logout', (req, res) => {
         res.redirect('/');
     });
 });
+
+app.get('/', async (req, res) => {
+    try {
+      let counter = await Counter.findOne();
+  
+      if (!counter) {
+        counter = new Counter({ count: 0 });
+      }
+  
+      counter.count++;
+
+      await counter.save();
+  
+      res.render('https://bandazeyna.com')
+  
+    } catch (err) {
+      console.error('Error updating counter:', err);
+      res.status(500).send('Internal Server Error');
+    }
+  });
 
 app.listen(PORT, () => {
     console.log(`🚀 API сервер запущен на порту ${PORT}`);
