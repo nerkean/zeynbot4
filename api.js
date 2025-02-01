@@ -16,7 +16,7 @@ const rateLimit = require("express-rate-limit");
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, 
-  max: 100, 
+  max: 300, 
   message: "Слишком много запросов с вашего IP, пожалуйста, попробуйте позже.",
   handler: (req, res, next, options) => {
     res.status(429).setHeader('Retry-After', Math.ceil(options.windowMs / 1000)).send(options.message);
