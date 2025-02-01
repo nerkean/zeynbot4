@@ -35,7 +35,7 @@ const PORT = process.env.PORT || 10000;
 const LEADERBOARD_CACHE_TTL = 5 * 60;
 
 const corsOptions = {
-    origin: 'http://127.0.0.1:5500',
+    origin: 'https://bandazeyna.com',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     optionsSuccessStatus: 200,
@@ -123,7 +123,7 @@ async function fetchUserGuildMember(userId) {
 passport.use(new DiscordStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: 'http://localhost:3000/auth/callback',
+    callbackURL: 'https://bandazeyna.com/auth/callback',
     scope: ['identify', 'guilds.members.read']
 },
 async (accessToken, refreshToken, profile, done) => {
@@ -483,7 +483,7 @@ app.get('/auth/callback',
             if (!user) {
                 return res.status(404).send('User not found');
             }
-            res.redirect(`http://127.0.0.1:5500/index.html?uuid=${user.uuid}`);
+            res.redirect(`https://bandazeyna.com?uuid=${user.uuid}`);
         } catch (error) {
             console.error("Error in /auth/callback:", error);
             res.status(500).send("An error occurred during authentication.");
