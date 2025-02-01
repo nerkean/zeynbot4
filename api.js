@@ -14,12 +14,6 @@ const { Client, IntentsBitField } = require('discord.js');
 const NodeCache = require('node-cache');
 const rateLimit = require("express-rate-limit");
 
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, 
-    max: 100,
-    message: "Слишком много запросов с вашего IP, пожалуйста, попробуйте позже.",
-});
-
 const cache = new NodeCache({ stdTTL: 60 * 60 });
 const client = new Client({
     intents: [
@@ -43,8 +37,6 @@ const corsOptions = {
     credentials: true
 };
 app.use(cors(corsOptions));
-
-app.use(limiter);
 
 app.use(express.json());
 
