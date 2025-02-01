@@ -513,9 +513,7 @@ app.get('/', async (req, res) => {
       counter.count++;
 
       await counter.save();
-  
-      res.render('https://bandazeyna.com')
-  
+
     } catch (err) {
       console.error('Error updating counter:', err);
       res.status(500).send('Internal Server Error');
