@@ -23,6 +23,14 @@ const roleToPosition = {
     '1043565185509630022': '🛠️ Админ',
 };
 
+function displayErrorMessage(message) {
+  const profileTabContent = document.querySelector('.profile-tab-content.hidden');
+    if (profileTabContent) {
+      profileTabContent.textContent = message;
+      profileTabContent.classList.remove('hidden');
+    }
+}
+
 tabs.forEach(tab => {
     tab.addEventListener('click', () => {
         const tabId = tab.dataset.tab;
@@ -49,13 +57,12 @@ async function fetchProfileData(uuid) {
         const errorText = await response.text();
         console.error("Ошибка при получении данных профиля:", response.status, response.statusText, errorText);
   
-        // Обработка ошибки 429 (Too Many Requests)
         if (response.status === 429) {
           const retryAfter = response.headers.get('Retry-After');
           const message = retryAfter
             ? `Превышен лимит запросов. Попробуйте снова через ${retryAfter} секунд.`
             : `Превышен лимит запросов. Попробуйте позже.`;
-          displayErrorMessage(message); // Показываем сообщение об ошибке на странице
+          displayErrorMessage(message); 
           throw new Error(message);
         }
   
@@ -67,7 +74,6 @@ async function fetchProfileData(uuid) {
       return data;
     } catch (error) {
       console.error("Ошибка в fetchProfileData:", error);
-      // Если это не ошибка 429, то покажем стандартное сообщение об ошибке
       if (error.message.indexOf('Превышен лимит запросов') === -1) {
         displayErrorMessage('Произошла ошибка при загрузке данных. Пожалуйста, обновите страницу или попробуйте позже.');
       }
