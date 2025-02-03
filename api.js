@@ -127,7 +127,7 @@ async function fetchUserGuildMember(userId) {
 passport.use(new DiscordStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: 'https://zeynbot3.onrender.com/auth/callback',
+    callbackURL: 'https://api.bandazeyna.com/auth/callback',
     scope: ['identify', 'guilds.members.read']
 },
 async (accessToken, refreshToken, profile, done) => {
