@@ -52,7 +52,7 @@ async function fetchProfileData(uuid) {
       return cachedProfileData[uuid];
     }
     try {
-      const response = await fetch(`https://zeynbot3.onrender.com/profile/${uuid}`);
+      const response = await fetch(`https://api.bandazeyna.com/profile/${uuid}`);
       if (!response.ok) {
         const errorText = await response.text();
         console.error("Ошибка при получении данных профиля:", response.status, response.statusText, errorText);
@@ -84,7 +84,7 @@ async function fetchProfileData(uuid) {
 async function fetchAchievementsData(uuid) {
     console.log(`функция fetchAchievementsData(${uuid}) вызвана`);
     try {
-        const response = await fetch(`https://zeynbot3.onrender.com/achievements/${uuid}`);
+        const response = await fetch(`https://api.bandazeyna.com/achievements/${uuid}`);
         if (!response.ok) {
             const errorText = await response.text();
             console.error(`Ошибка при получении данных об ачивках: ${response.status} ${response.statusText} - ${errorText}`);
@@ -332,7 +332,7 @@ function displayAchievementsData(achievements) {
 
 async function fetchLeaderboardData(sortBy) {
     try {
-        const response = await fetch(`https://zeynbot3.onrender.com/leaderboard?sortBy=${sortBy}`)
+        const response = await fetch(`https://api.bandazeyna.com/leaderboard?sortBy=${sortBy}`)
         if (!response.ok) {
             throw new Error('Ошибка при получении данных для таблицы лидеров');
         }
@@ -347,7 +347,7 @@ async function fetchLeaderboardData(sortBy) {
 
 async function fetchMessagesByDate(uuid) {
     try {
-        const response = await fetch(`https://zeynbot3.onrender.com/profile/${uuid}/messagesByDate`);
+        const response = await fetch(`https://api.bandazeyna.com/profile/${uuid}/messagesByDate`);
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(`Ошибка при получении данных о сообщениях по дням: ${response.status} ${response.statusText} - ${errorText}`);
@@ -366,7 +366,7 @@ async function fetchShopData() {
         return shopDataCache;
     }
     try {
-        const response = await fetch(`https://zeynbot3.onrender.com/shop`);
+        const response = await fetch(`https://api.bandazeyna.com/shop`);
         if (!response.ok) {
             const errorText = await response.text();
             console.error(`Ошибка при получении данных магазина: ${response.status} ${response.statusText} - ${errorText}`);
@@ -531,7 +531,7 @@ async function buyItem(uuid, itemName, quantity) {
         }
         console.log("userId:", userId);
 
-        const response = await fetch('https://zeynbot3.onrender.com/buy', {
+        const response = await fetch('https://api.bandazeyna.com/buy', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -790,7 +790,7 @@ function showLoginButton() {
     loginButton.style.display = 'flex'; 
 
     loginButton.onclick = () => {
-        window.location.href = 'https://zeynbot3.onrender.com/auth/discord';
+        window.location.href = 'https://api.bandazeyna.com/auth/discord';
     };
 }
 
